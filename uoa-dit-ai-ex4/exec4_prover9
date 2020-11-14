@@ -1,0 +1,36 @@
+% Saved by Prover9-Mace4 Version 0.5, December 2007.
+
+set(ignore_option_dependencies). % GUI handles dependencies
+
+if(Prover9). % Options for Prover9
+  assign(max_seconds, 60).
+end_if.
+
+if(Mace4).   % Options for Mace4
+  assign(max_seconds, 60).
+end_if.
+
+formulas(assumptions).
+
+SetS(x) -> setc(x).
+SetT(x) -> setc(x).
+Elem(x) -> num(x).
+
+num(x) -> -setc(x).
+SetS(x) -> -SetT(x).
+exists x SetS(x).
+exists x SetT(x).
+exists x Elem(x).
+
+(in(x,s) & SetS(s) & SetT(t) & in(x,t) & num(x)) <-> in(x,inter(s,t)) # label("sentence I").
+
+((in(x,s) & SetS(s) & num(x)) -> (in(x,t) & SetT(t))) -> sub(s,t) # label("sentence II").
+
+end_of_list.
+
+formulas(goals).
+
+all s all t (SetS(s) & SetT(t) & sub(inter(s,t),s)).
+
+end_of_list.
+

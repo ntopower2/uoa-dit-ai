@@ -1,0 +1,272 @@
+============================== Prover9 ===============================
+Prover9 (32) version Dec-2007, Dec 2007.
+Process 4216 was started by N^2 on BLUEPOWER,
+Mon Jan  7 01:56:21 2019
+The command was "/cygdrive/c/Program Files (x86)/Prover9-Mace4/bin-win32/prover9".
+============================== end of head ===========================
+
+============================== INPUT =================================
+assign(report_stderr,2).
+set(ignore_option_dependencies).
+if(Prover9).
+% Conditional input included.
+assign(max_seconds,60).
+end_if.
+if(Mace4).
+% Conditional input omitted.
+end_if.
+
+formulas(assumptions).
+George(x) -> member(x).
+Kostas(x) -> member(x).
+Ntora(x) -> member(x).
+Capital(x) -> thing(x).
+Social(x) -> thing(x).
+(exists x George(x)).
+(exists x Kostas(x)).
+(exists x Ntora(x)).
+(exists x Capital(x)).
+(exists x Social(x)).
+member(x) & -right(x) -> liberal(x) # label("sentence II").
+right(x) -> -likes(x,t) & Social(t) # label("sentence III").
+-likes(x,t) & Capital(t) -> -liberal(x) # label("sentence IV").
+George(x) & likes(x,t) & thing(t) -> Kostas(y) & -likes(y,t) # label("sentence Va").
+George(x) & -likes(x,t) & thing(t) -> Kostas(y) & likes(y,t) # label("sentence Vb").
+George(x) -> likes(x,t) & Capital(t) # label("sentence VIa").
+George(x) -> likes(x,t) & Social(t) # label("sentence VIb").
+end_of_list.
+
+formulas(goals).
+(exists x (member(x) & liberal(x) & -right(x))).
+end_of_list.
+
+============================== end of input ==========================
+
+% Enabling option dependencies (ignore applies only on input).
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 George(x) -> member(x) # label(non_clause).  [assumption].
+2 Kostas(x) -> member(x) # label(non_clause).  [assumption].
+3 Ntora(x) -> member(x) # label(non_clause).  [assumption].
+4 Capital(x) -> thing(x) # label(non_clause).  [assumption].
+5 Social(x) -> thing(x) # label(non_clause).  [assumption].
+6 (exists x George(x)) # label(non_clause).  [assumption].
+7 (exists x Kostas(x)) # label(non_clause).  [assumption].
+8 (exists x Ntora(x)) # label(non_clause).  [assumption].
+9 (exists x Capital(x)) # label(non_clause).  [assumption].
+10 (exists x Social(x)) # label(non_clause).  [assumption].
+11 member(x) & -right(x) -> liberal(x) # label("sentence II") # label(non_clause).  [assumption].
+12 right(x) -> -likes(x,t) & Social(t) # label("sentence III") # label(non_clause).  [assumption].
+13 -likes(x,t) & Capital(t) -> -liberal(x) # label("sentence IV") # label(non_clause).  [assumption].
+14 George(x) & likes(x,t) & thing(t) -> Kostas(y) & -likes(y,t) # label("sentence Va") # label(non_clause).  [assumption].
+15 George(x) & -likes(x,t) & thing(t) -> Kostas(y) & likes(y,t) # label("sentence Vb") # label(non_clause).  [assumption].
+16 George(x) -> likes(x,t) & Capital(t) # label("sentence VIa") # label(non_clause).  [assumption].
+17 George(x) -> likes(x,t) & Social(t) # label("sentence VIb") # label(non_clause).  [assumption].
+18 (exists x (member(x) & liberal(x) & -right(x))) # label(non_clause) # label(goal).  [goal].
+
+============================== end of process non-clausal formulas ===
+
+============================== PROCESS INITIAL CLAUSES ===============
+
+% Clauses before input processing:
+
+formulas(usable).
+end_of_list.
+
+formulas(sos).
+-George(x) | member(x).  [clausify(1)].
+-Kostas(x) | member(x).  [clausify(2)].
+-Ntora(x) | member(x).  [clausify(3)].
+-Capital(x) | thing(x).  [clausify(4)].
+-Social(x) | thing(x).  [clausify(5)].
+George(c1).  [clausify(6)].
+Kostas(c2).  [clausify(7)].
+Ntora(c3).  [clausify(8)].
+Capital(c4).  [clausify(9)].
+Social(c5).  [clausify(10)].
+-member(x) | right(x) | liberal(x) # label("sentence II").  [clausify(11)].
+-right(x) | -likes(x,t) # label("sentence III").  [clausify(12)].
+-right(x) | Social(t) # label("sentence III").  [clausify(12)].
+likes(x,t) | -Capital(t) | -liberal(x) # label("sentence IV").  [clausify(13)].
+-George(x) | -likes(x,t) | -thing(t) | Kostas(y) # label("sentence Va").  [clausify(14)].
+-George(x) | -likes(x,t) | -thing(t) | -likes(y,t) # label("sentence Va").  [clausify(14)].
+-George(x) | likes(x,t) | -thing(t) | Kostas(y) # label("sentence Vb").  [clausify(15)].
+-George(x) | likes(x,t) | -thing(t) | likes(y,t) # label("sentence Vb").  [clausify(15)].
+-George(x) | likes(x,t) # label("sentence VIa").  [clausify(16)].
+-George(x) | Capital(t) # label("sentence VIa").  [clausify(16)].
+-George(x) | likes(x,t) # label("sentence VIb").  [clausify(17)].
+-George(x) | Social(t) # label("sentence VIb").  [clausify(17)].
+-member(x) | -liberal(x) | right(x).  [deny(18)].
+end_of_list.
+
+formulas(demodulators).
+end_of_list.
+
+============================== PREDICATE ELIMINATION =================
+
+Eliminating George/1
+19 George(c1).  [clausify(6)].
+20 -George(x) | member(x).  [clausify(1)].
+Derived: member(c1).  [resolve(19,a,20,a)].
+21 -George(x) | -likes(x,t) | -thing(t) | Kostas(y) # label("sentence Va").  [clausify(14)].
+Derived: -likes(c1,t) | -thing(t) | Kostas(x).  [resolve(21,a,19,a)].
+22 -George(x) | -likes(x,t) | -thing(t) | -likes(y,t) # label("sentence Va").  [clausify(14)].
+Derived: -likes(c1,t) | -thing(t) | -likes(x,t).  [resolve(22,a,19,a)].
+23 -George(x) | likes(x,t) | -thing(t) | Kostas(y) # label("sentence Vb").  [clausify(15)].
+Derived: likes(c1,t) | -thing(t) | Kostas(x).  [resolve(23,a,19,a)].
+24 -George(x) | likes(x,t) | -thing(t) | likes(y,t) # label("sentence Vb").  [clausify(15)].
+Derived: likes(c1,t) | -thing(t) | likes(x,t).  [resolve(24,a,19,a)].
+25 -George(x) | likes(x,t) # label("sentence VIa").  [clausify(16)].
+Derived: likes(c1,t).  [resolve(25,a,19,a)].
+26 -George(x) | Capital(t) # label("sentence VIa").  [clausify(16)].
+Derived: Capital(t).  [resolve(26,a,19,a)].
+27 -George(x) | likes(x,t) # label("sentence VIb").  [clausify(17)].
+28 -George(x) | Social(t) # label("sentence VIb").  [clausify(17)].
+Derived: Social(t).  [resolve(28,a,19,a)].
+
+Eliminating Kostas/1
+29 Kostas(c2).  [clausify(7)].
+30 -Kostas(x) | member(x).  [clausify(2)].
+Derived: member(c2).  [resolve(29,a,30,a)].
+31 -likes(c1,t) | -thing(t) | Kostas(x).  [resolve(21,a,19,a)].
+32 likes(c1,t) | -thing(t) | Kostas(x).  [resolve(23,a,19,a)].
+
+Eliminating Ntora/1
+33 Ntora(c3).  [clausify(8)].
+34 -Ntora(x) | member(x).  [clausify(3)].
+Derived: member(c3).  [resolve(33,a,34,a)].
+
+Eliminating Capital/1
+35 Capital(c4).  [clausify(9)].
+36 -Capital(x) | thing(x).  [clausify(4)].
+Derived: thing(c4).  [resolve(35,a,36,a)].
+37 likes(x,t) | -Capital(t) | -liberal(x) # label("sentence IV").  [clausify(13)].
+38 Capital(t).  [resolve(26,a,19,a)].
+Derived: thing(t).  [resolve(38,a,36,a)].
+Derived: likes(x,t) | -liberal(x).  [resolve(38,a,37,b)].
+
+Eliminating Social/1
+39 Social(c5).  [clausify(10)].
+40 -Social(x) | thing(x).  [clausify(5)].
+Derived: thing(c5).  [resolve(39,a,40,a)].
+41 -right(x) | Social(t) # label("sentence III").  [clausify(12)].
+42 Social(t).  [resolve(28,a,19,a)].
+
+Eliminating member/1
+43 member(c1).  [resolve(19,a,20,a)].
+44 -member(x) | right(x) | liberal(x) # label("sentence II").  [clausify(11)].
+45 -member(x) | -liberal(x) | right(x).  [deny(18)].
+Derived: right(c1) | liberal(c1).  [resolve(43,a,44,a)].
+Derived: -liberal(c1) | right(c1).  [resolve(43,a,45,a)].
+46 member(c2).  [resolve(29,a,30,a)].
+Derived: right(c2) | liberal(c2).  [resolve(46,a,44,a)].
+Derived: -liberal(c2) | right(c2).  [resolve(46,a,45,a)].
+47 member(c3).  [resolve(33,a,34,a)].
+Derived: right(c3) | liberal(c3).  [resolve(47,a,44,a)].
+Derived: -liberal(c3) | right(c3).  [resolve(47,a,45,a)].
+
+Eliminating right/1
+48 right(c1) | liberal(c1).  [resolve(43,a,44,a)].
+49 -right(x) | -likes(x,t) # label("sentence III").  [clausify(12)].
+Derived: liberal(c1) | -likes(c1,t).  [resolve(48,a,49,a)].
+50 -liberal(c1) | right(c1).  [resolve(43,a,45,a)].
+Derived: -liberal(c1) | -likes(c1,t).  [resolve(50,b,49,a)].
+51 right(c2) | liberal(c2).  [resolve(46,a,44,a)].
+Derived: liberal(c2) | -likes(c2,t).  [resolve(51,a,49,a)].
+52 -liberal(c2) | right(c2).  [resolve(46,a,45,a)].
+Derived: -liberal(c2) | -likes(c2,t).  [resolve(52,b,49,a)].
+53 right(c3) | liberal(c3).  [resolve(47,a,44,a)].
+Derived: liberal(c3) | -likes(c3,t).  [resolve(53,a,49,a)].
+54 -liberal(c3) | right(c3).  [resolve(47,a,45,a)].
+Derived: -liberal(c3) | -likes(c3,t).  [resolve(54,b,49,a)].
+
+Eliminating thing/1
+55 thing(c4).  [resolve(35,a,36,a)].
+56 -likes(c1,t) | -thing(t) | -likes(x,t).  [resolve(22,a,19,a)].
+57 likes(c1,t) | -thing(t) | likes(x,t).  [resolve(24,a,19,a)].
+58 thing(t).  [resolve(38,a,36,a)].
+Derived: -likes(c1,t) | -likes(x,t).  [resolve(58,a,56,b)].
+Derived: likes(c1,t) | likes(x,t).  [resolve(58,a,57,b)].
+59 thing(c5).  [resolve(39,a,40,a)].
+
+Eliminating liberal/1
+60 liberal(c1) | -likes(c1,t).  [resolve(48,a,49,a)].
+61 likes(x,t) | -liberal(x).  [resolve(38,a,37,b)].
+62 -liberal(c1) | -likes(c1,t).  [resolve(50,b,49,a)].
+63 liberal(c2) | -likes(c2,t).  [resolve(51,a,49,a)].
+64 -liberal(c2) | -likes(c2,t).  [resolve(52,b,49,a)].
+Derived: -likes(c2,t) | -likes(c2,t).  [resolve(64,a,63,a)].
+65 liberal(c3) | -likes(c3,t).  [resolve(53,a,49,a)].
+66 -liberal(c3) | -likes(c3,t).  [resolve(54,b,49,a)].
+Derived: -likes(c3,t) | -likes(c3,t).  [resolve(66,a,65,a)].
+
+============================== end predicate elimination =============
+
+Auto_denials:  (non-Horn, no changes).
+
+Term ordering decisions:
+Predicate symbol precedence:  predicate_order([ likes ]).
+Function symbol precedence:  function_order([ t, c1, c2, c3 ]).
+After inverse_order:  (no changes).
+Unfolding symbols: (none).
+
+Auto_inference settings:
+  % set(binary_resolution).  % (non-Horn)
+  % set(neg_ur_resolution).  % (non-Horn, less than 100 clauses)
+
+Auto_process settings:
+  % set(factor).  % (non-Horn)
+  % set(unit_deletion).  % (non-Horn)
+
+============================== PROOF =================================
+
+% Proof 1 at 0.00 (+ 0.03) seconds.
+% Length of proof is 16.
+% Level of proof is 6.
+% Maximum clause weight is 3.
+% Given clauses 0.
+
+4 Capital(x) -> thing(x) # label(non_clause).  [assumption].
+6 (exists x George(x)) # label(non_clause).  [assumption].
+14 George(x) & likes(x,t) & thing(t) -> Kostas(y) & -likes(y,t) # label("sentence Va") # label(non_clause).  [assumption].
+16 George(x) -> likes(x,t) & Capital(t) # label("sentence VIa") # label(non_clause).  [assumption].
+19 George(c1).  [clausify(6)].
+22 -George(x) | -likes(x,t) | -thing(t) | -likes(y,t) # label("sentence Va").  [clausify(14)].
+25 -George(x) | likes(x,t) # label("sentence VIa").  [clausify(16)].
+26 -George(x) | Capital(t) # label("sentence VIa").  [clausify(16)].
+36 -Capital(x) | thing(x).  [clausify(4)].
+38 Capital(t).  [resolve(26,a,19,a)].
+56 -likes(c1,t) | -thing(t) | -likes(x,t).  [resolve(22,a,19,a)].
+58 thing(t).  [resolve(38,a,36,a)].
+67 likes(c1,t).  [resolve(25,a,19,a)].
+68 -likes(c1,t) | -likes(x,t).  [resolve(58,a,56,b)].
+69 -likes(x,t).  [copy(68),unit_del(a,67)].
+70 $F.  [resolve(69,a,67,a)].
+
+============================== end of proof ==========================
+
+============================== STATISTICS ============================
+
+Given=0. Generated=2. Kept=2. proofs=1.
+Usable=0. Sos=0. Demods=0. Limbo=1, Disabled=50. Hints=0.
+Weight_deleted=0. Literals_deleted=0.
+Forward_subsumed=0. Back_subsumed=0.
+Sos_limit_deleted=0. Sos_displaced=0. Sos_removed=0.
+New_demodulators=0 (0 lex), Back_demodulated=0. Back_unit_deleted=0.
+Demod_attempts=0. Demod_rewrites=0.
+Res_instance_prunes=0. Para_instance_prunes=0. Basic_paramod_prunes=0.
+Nonunit_fsub_feature_tests=0. Nonunit_bsub_feature_tests=0.
+Megabytes=0.04.
+User_CPU=0.00, System_CPU=0.03, Wall_clock=0.
+
+============================== end of statistics =====================
+
+============================== end of search =========================
+
+THEOREM PROVED
+
+Exiting with 1 proof.
+
+Process 4216 exit (max_proofs) Mon Jan  7 01:56:21 2019

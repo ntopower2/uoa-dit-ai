@@ -1,0 +1,318 @@
+============================== Prover9 ===============================
+Prover9 (32) version Dec-2007, Dec 2007.
+Process 3420 was started by N^2 on BLUEPOWER,
+Tue Jan 15 21:29:23 2019
+The command was "/cygdrive/c/Program Files (x86)/Prover9-Mace4/bin-win32/prover9".
+============================== end of head ===========================
+
+============================== INPUT =================================
+assign(report_stderr,2).
+set(ignore_option_dependencies).
+if(Prover9).
+% Conditional input included.
+assign(max_seconds,20).
+end_if.
+if(Mace4).
+% Conditional input omitted.
+end_if.
+
+formulas(assumptions).
+member(john).
+member(maria).
+member(george).
+member(helen).
+helen != john & helen != george & helen != maria.
+spouse(john,maria).
+sibling(george,helen).
+member(x) & spouse(x,y) -> member(y).
+spouse(x,y) -> spouse(y,x).
+sibling(x,y) -> sibling(y,x).
+member(x) -> x = maria | x = john | x = george | x = helen.
+sibling(x,y) -> -spouse(x,y).
+member(x) -> -spouse(x,x).
+spouse(x,y) & y != z & x != z -> -spouse(x,z).
+end_of_list.
+
+formulas(goals).
+-spouse(helen,x).
+end_of_list.
+
+============================== end of input ==========================
+
+% Enabling option dependencies (ignore applies only on input).
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 helen != john & helen != george & helen != maria # label(non_clause).  [assumption].
+2 member(x) & spouse(x,y) -> member(y) # label(non_clause).  [assumption].
+3 spouse(x,y) -> spouse(y,x) # label(non_clause).  [assumption].
+4 sibling(x,y) -> sibling(y,x) # label(non_clause).  [assumption].
+5 member(x) -> x = maria | x = john | x = george | x = helen # label(non_clause).  [assumption].
+6 sibling(x,y) -> -spouse(x,y) # label(non_clause).  [assumption].
+7 member(x) -> -spouse(x,x) # label(non_clause).  [assumption].
+8 spouse(x,y) & y != z & x != z -> -spouse(x,z) # label(non_clause).  [assumption].
+9 -spouse(helen,x) # label(non_clause) # label(goal).  [goal].
+
+============================== end of process non-clausal formulas ===
+
+============================== PROCESS INITIAL CLAUSES ===============
+
+% Clauses before input processing:
+
+formulas(usable).
+end_of_list.
+
+formulas(sos).
+member(john).  [assumption].
+member(maria).  [assumption].
+member(george).  [assumption].
+member(helen).  [assumption].
+helen != john.  [clausify(1)].
+helen != george.  [clausify(1)].
+helen != maria.  [clausify(1)].
+spouse(john,maria).  [assumption].
+sibling(george,helen).  [assumption].
+-member(x) | -spouse(x,y) | member(y).  [clausify(2)].
+-spouse(x,y) | spouse(y,x).  [clausify(3)].
+-sibling(x,y) | sibling(y,x).  [clausify(4)].
+-member(x) | x = maria | x = john | x = george | x = helen.  [clausify(5)].
+-sibling(x,y) | -spouse(x,y).  [clausify(6)].
+-member(x) | -spouse(x,x).  [clausify(7)].
+-spouse(x,y) | z = y | z = x | -spouse(x,z).  [clausify(8)].
+spouse(helen,c1).  [deny(9)].
+end_of_list.
+
+formulas(demodulators).
+end_of_list.
+
+============================== PREDICATE ELIMINATION =================
+
+No predicates eliminated.
+
+============================== end predicate elimination =============
+
+Auto_denials:  (non-Horn, no changes).
+
+Term ordering decisions:
+Predicate symbol precedence:  predicate_order([ =, member, spouse, sibling ]).
+Function symbol precedence:  function_order([ helen, george, john, maria, c1 ]).
+After inverse_order:  (no changes).
+Unfolding symbols: (none).
+
+Auto_inference settings:
+  % set(paramodulation).  % (positive equality literals)
+  % set(binary_resolution).  % (non-Horn)
+  % set(neg_ur_resolution).  % (non-Horn, less than 100 clauses)
+
+Auto_process settings:
+  % set(factor).  % (non-Horn)
+  % set(unit_deletion).  % (non-Horn)
+
+============================== end of process initial clauses ========
+
+============================== CLAUSES FOR SEARCH ====================
+
+% Clauses after input processing:
+
+formulas(usable).
+end_of_list.
+
+formulas(sos).
+10 member(john).  [assumption].
+11 member(maria).  [assumption].
+12 member(george).  [assumption].
+13 member(helen).  [assumption].
+15 john != helen.  [copy(14),flip(a)].
+17 george != helen.  [copy(16),flip(a)].
+19 maria != helen.  [copy(18),flip(a)].
+20 spouse(john,maria).  [assumption].
+21 sibling(george,helen).  [assumption].
+22 -member(x) | -spouse(x,y) | member(y).  [clausify(2)].
+23 -spouse(x,y) | spouse(y,x).  [clausify(3)].
+24 -sibling(x,y) | sibling(y,x).  [clausify(4)].
+26 -member(x) | maria = x | john = x | george = x | helen = x.  [copy(25),flip(b),flip(c),flip(d),flip(e)].
+27 -sibling(x,y) | -spouse(x,y).  [clausify(6)].
+28 -member(x) | -spouse(x,x).  [clausify(7)].
+29 -spouse(x,y) | z = y | z = x | -spouse(x,z).  [clausify(8)].
+30 spouse(helen,c1).  [deny(9)].
+31 -spouse(x,x) | y = x | -spouse(x,y).  [factor(29,b,c)].
+end_of_list.
+
+formulas(demodulators).
+end_of_list.
+
+============================== end of clauses for search =============
+
+============================== SEARCH ================================
+
+% Starting search at 0.01 seconds.
+
+given #1 (I,wt=2): 10 member(john).  [assumption].
+
+given #2 (I,wt=2): 11 member(maria).  [assumption].
+
+given #3 (I,wt=2): 12 member(george).  [assumption].
+
+given #4 (I,wt=2): 13 member(helen).  [assumption].
+
+given #5 (I,wt=3): 15 john != helen.  [copy(14),flip(a)].
+
+given #6 (I,wt=3): 17 george != helen.  [copy(16),flip(a)].
+
+given #7 (I,wt=3): 19 maria != helen.  [copy(18),flip(a)].
+
+given #8 (I,wt=3): 20 spouse(john,maria).  [assumption].
+
+given #9 (I,wt=3): 21 sibling(george,helen).  [assumption].
+
+given #10 (I,wt=7): 22 -member(x) | -spouse(x,y) | member(y).  [clausify(2)].
+
+given #11 (I,wt=6): 23 -spouse(x,y) | spouse(y,x).  [clausify(3)].
+
+given #12 (I,wt=6): 24 -sibling(x,y) | sibling(y,x).  [clausify(4)].
+
+given #13 (I,wt=14): 26 -member(x) | maria = x | john = x | george = x | helen = x.  [copy(25),flip(b),flip(c),flip(d),flip(e)].
+
+given #14 (I,wt=6): 27 -sibling(x,y) | -spouse(x,y).  [clausify(6)].
+
+given #15 (I,wt=5): 28 -member(x) | -spouse(x,x).  [clausify(7)].
+
+given #16 (I,wt=12): 29 -spouse(x,y) | z = y | z = x | -spouse(x,z).  [clausify(8)].
+
+given #17 (I,wt=3): 30 spouse(helen,c1).  [deny(9)].
+
+given #18 (I,wt=9): 31 -spouse(x,x) | y = x | -spouse(x,y).  [factor(29,b,c)].
+
+given #19 (A,wt=3): 32 spouse(maria,john).  [resolve(23,a,20,a)].
+
+given #20 (F,wt=3): 34 -spouse(george,helen).  [resolve(27,a,21,a)].
+
+given #21 (F,wt=3): 35 -sibling(john,maria).  [ur(27,b,20,a)].
+
+given #22 (F,wt=3): 36 -spouse(helen,helen).  [ur(28,a,13,a)].
+
+given #23 (F,wt=3): 37 -spouse(george,george).  [ur(28,a,12,a)].
+
+given #24 (T,wt=2): 46 member(c1).  [resolve(30,a,22,b),unit_del(a,13)].
+
+given #25 (T,wt=3): 33 sibling(helen,george).  [resolve(24,a,21,a)].
+
+given #26 (T,wt=3): 45 spouse(c1,helen).  [resolve(30,a,23,a)].
+
+given #27 (T,wt=9): 40 maria = x | john = x | -spouse(john,x).  [resolve(29,a,20,a),flip(a),flip(b)].
+
+given #28 (A,wt=3): 38 -spouse(maria,maria).  [ur(28,a,11,a)].
+
+given #29 (F,wt=3): 39 -spouse(john,john).  [ur(28,a,10,a)].
+
+given #30 (F,wt=3): 42 -spouse(john,helen).  [ur(29,a,20,a,b,19,a(flip),c,15,a(flip))].
+
+given #31 (F,wt=3): 47 -sibling(helen,c1).  [ur(27,b,30,a)].
+
+given #32 (F,wt=3): 50 -spouse(maria,helen).  [ur(29,a,32,a,b,15,a(flip),c,19,a(flip))].
+
+given #33 (T,wt=9): 41 -spouse(john,x) | maria = x | maria = john.  [resolve(29,d,20,a)].
+
+given #34 (T,wt=9): 43 -spouse(helen,x) | c1 = x | c1 = helen.  [resolve(30,a,29,d)].
+
+given #35 (T,wt=9): 44 c1 = x | helen = x | -spouse(helen,x).  [resolve(30,a,29,a),flip(a),flip(b)].
+
+given #36 (T,wt=9): 48 -spouse(maria,x) | john = x | maria = john.  [resolve(32,a,29,d),flip(c)].
+
+given #37 (A,wt=9): 49 john = x | maria = x | -spouse(maria,x).  [resolve(32,a,29,a),flip(a),flip(b)].
+
+given #38 (F,wt=3): 51 -sibling(maria,john).  [ur(27,b,32,a)].
+
+given #39 (F,wt=3): 52 -spouse(helen,george).  [ur(23,b,34,a)].
+
+given #40 (F,wt=3): 54 -spouse(c1,c1).  [ur(28,a,46,a)].
+
+given #41 (F,wt=3): 57 -sibling(c1,helen).  [ur(27,b,45,a)].
+
+given #42 (T,wt=9): 55 -spouse(c1,x) | helen = x | c1 = helen.  [resolve(45,a,29,d),flip(c)].
+
+given #43 (T,wt=9): 56 helen = x | c1 = x | -spouse(c1,x).  [resolve(45,a,29,a),flip(a),flip(b)].
+
+given #44 (T,wt=12): 53 c1 = maria | c1 = john | c1 = george | c1 = helen.  [resolve(46,a,26,a),flip(a),flip(b),flip(c),flip(d)].
+
+given #45 (T,wt=9): 60 c1 = john | c1 = george | c1 = helen.  [para(53(a,1),30(a,2)),unit_del(d,59)].
+
+given #46 (A,wt=3): 58 -spouse(helen,john).  [ur(23,b,42,a)].
+
+given #47 (F,wt=3): 59 -spouse(helen,maria).  [ur(23,b,50,a)].
+
+given #48 (T,wt=6): 61 c1 = george | c1 = helen.  [para(60(a,1),30(a,2)),unit_del(c,58)].
+
+============================== PROOF =================================
+
+% Proof 1 at 0.03 (+ 0.03) seconds.
+% Length of proof is 38.
+% Level of proof is 8.
+% Maximum clause weight is 14.
+% Given clauses 48.
+
+1 helen != john & helen != george & helen != maria # label(non_clause).  [assumption].
+2 member(x) & spouse(x,y) -> member(y) # label(non_clause).  [assumption].
+3 spouse(x,y) -> spouse(y,x) # label(non_clause).  [assumption].
+5 member(x) -> x = maria | x = john | x = george | x = helen # label(non_clause).  [assumption].
+6 sibling(x,y) -> -spouse(x,y) # label(non_clause).  [assumption].
+7 member(x) -> -spouse(x,x) # label(non_clause).  [assumption].
+8 spouse(x,y) & y != z & x != z -> -spouse(x,z) # label(non_clause).  [assumption].
+9 -spouse(helen,x) # label(non_clause) # label(goal).  [goal].
+13 member(helen).  [assumption].
+14 helen != john.  [clausify(1)].
+15 john != helen.  [copy(14),flip(a)].
+18 helen != maria.  [clausify(1)].
+19 maria != helen.  [copy(18),flip(a)].
+20 spouse(john,maria).  [assumption].
+21 sibling(george,helen).  [assumption].
+22 -member(x) | -spouse(x,y) | member(y).  [clausify(2)].
+23 -spouse(x,y) | spouse(y,x).  [clausify(3)].
+25 -member(x) | x = maria | x = john | x = george | x = helen.  [clausify(5)].
+26 -member(x) | maria = x | john = x | george = x | helen = x.  [copy(25),flip(b),flip(c),flip(d),flip(e)].
+27 -sibling(x,y) | -spouse(x,y).  [clausify(6)].
+28 -member(x) | -spouse(x,x).  [clausify(7)].
+29 -spouse(x,y) | z = y | z = x | -spouse(x,z).  [clausify(8)].
+30 spouse(helen,c1).  [deny(9)].
+32 spouse(maria,john).  [resolve(23,a,20,a)].
+34 -spouse(george,helen).  [resolve(27,a,21,a)].
+36 -spouse(helen,helen).  [ur(28,a,13,a)].
+42 -spouse(john,helen).  [ur(29,a,20,a,b,19,a(flip),c,15,a(flip))].
+45 spouse(c1,helen).  [resolve(30,a,23,a)].
+46 member(c1).  [resolve(30,a,22,b),unit_del(a,13)].
+50 -spouse(maria,helen).  [ur(29,a,32,a,b,15,a(flip),c,19,a(flip))].
+52 -spouse(helen,george).  [ur(23,b,34,a)].
+53 c1 = maria | c1 = john | c1 = george | c1 = helen.  [resolve(46,a,26,a),flip(a),flip(b),flip(c),flip(d)].
+58 -spouse(helen,john).  [ur(23,b,42,a)].
+59 -spouse(helen,maria).  [ur(23,b,50,a)].
+60 c1 = john | c1 = george | c1 = helen.  [para(53(a,1),30(a,2)),unit_del(d,59)].
+61 c1 = george | c1 = helen.  [para(60(a,1),30(a,2)),unit_del(c,58)].
+62 c1 = helen.  [para(61(a,1),30(a,2)),unit_del(b,52)].
+65 $F.  [back_rewrite(45),rewrite([62(1)]),unit_del(a,36)].
+
+============================== end of proof ==========================
+
+============================== STATISTICS ============================
+
+Given=48. Generated=125. Kept=51. proofs=1.
+Usable=37. Sos=0. Demods=1. Limbo=3, Disabled=28. Hints=0.
+Weight_deleted=0. Literals_deleted=0.
+Forward_subsumed=73. Back_subsumed=5.
+Sos_limit_deleted=0. Sos_displaced=0. Sos_removed=0.
+New_demodulators=1 (0 lex), Back_demodulated=6. Back_unit_deleted=0.
+Demod_attempts=105. Demod_rewrites=22.
+Res_instance_prunes=0. Para_instance_prunes=0. Basic_paramod_prunes=0.
+Nonunit_fsub_feature_tests=17. Nonunit_bsub_feature_tests=32.
+Megabytes=0.05.
+User_CPU=0.03, System_CPU=0.03, Wall_clock=0.
+
+============================== end of statistics =====================
+
+============================== end of search =========================
+
+THEOREM PROVED
+
+Exiting with 1 proof.
+
+Process 3420 exit (max_proofs) Tue Jan 15 21:29:23 2019

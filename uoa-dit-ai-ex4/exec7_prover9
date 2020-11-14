@@ -1,0 +1,50 @@
+% Saved by Prover9-Mace4 Version 0.5, December 2007.
+
+set(ignore_option_dependencies). % GUI handles dependencies
+
+if(Prover9). % Options for Prover9
+  assign(max_seconds, 20).
+end_if.
+
+if(Mace4).   % Options for Mace4
+  assign(max_seconds, 60).
+end_if.
+
+formulas(assumptions).
+
+% members of Gavroi
+member(john).
+member(maria).
+member(george).
+member(helen).
+%(helen != john) & (helen != george) & (helen != maria).
+
+%proof of existence (people)
+exists x member(x).
+
+spouse(john,maria).
+
+sibling(george,helen).
+
+all x all y ((member(x) & spouse(x,y)) -> member(y)).
+
+all x all y (spouse(x,y) -> spouse(y,x)).
+
+all x all y (sibling(x,y) -> sibling(y,x)).
+
+%-----------------------------------------------
+
+all x all y sibling(x,y) -> -spouse(x,y).
+
+all x (member(x) -> -spouse(x,x)).
+
+all x all y all z ((spouse(x,y) & y != z & x != z) -> -spouse(x,z)).
+
+end_of_list.
+
+formulas(goals).
+
+-spouse(helen,george).
+
+end_of_list.
+

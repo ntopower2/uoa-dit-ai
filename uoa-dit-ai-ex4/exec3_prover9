@@ -1,0 +1,50 @@
+% Saved by Prover9-Mace4 Version 0.5, December 2007.
+
+set(ignore_option_dependencies). % GUI handles dependencies
+
+if(Prover9). % Options for Prover9
+  assign(max_seconds, 60).
+end_if.
+
+if(Mace4).   % Options for Mace4
+  assign(max_seconds, 60).
+end_if.
+
+formulas(assumptions).
+
+% members of IMF
+George(x) -> member(x).
+Kostas(x) -> member(x).
+Ntora(x) -> member(x).
+% beliefs
+Capital(x) -> thing(x).
+Social(x) -> thing(x).
+
+%proof of existence (people)
+exists x George(x).
+exists x Kostas(x).
+exists x Ntora(x).
+%proof of existence (beliefs)
+exists x Capital(x).
+exists x Social(x).
+
+(member(x) & -right(x)) -> liberal(x) # label("sentence II").
+
+right(x) -> (-likes(x,t) & Social(t)) # label("sentence III").
+
+(-likes(x,t) & Capital(t)) -> -liberal(x) # label("sentence IV").
+
+(George(x) & likes(x,t) & thing(t)) -> (Kostas(y) & -likes(y,t)) # label("sentence Va").
+
+(George(x) & -likes(x,t) & thing(t)) -> (Kostas(y) & likes(y,t)) # label("sentence Vb").
+
+George(x) -> (likes(x,t) & Capital(t)) # label("sentence VIa"). 
+
+George(x) -> (likes(x,t) & Social(t)) # label("sentence VIb").
+
+end_of_list.
+
+formulas(goals).
+
+end_of_list.
+

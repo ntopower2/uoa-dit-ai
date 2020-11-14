@@ -1,0 +1,239 @@
+============================== Prover9 ===============================
+Prover9 (32) version Dec-2007, Dec 2007.
+Process 8116 was started by N^2 on BLUEPOWER,
+Mon Jan  7 01:59:21 2019
+The command was "/cygdrive/c/Program Files (x86)/Prover9-Mace4/bin-win32/prover9".
+============================== end of head ===========================
+
+============================== INPUT =================================
+assign(report_stderr,2).
+set(ignore_option_dependencies).
+if(Prover9).
+% Conditional input included.
+assign(max_seconds,60).
+end_if.
+if(Mace4).
+% Conditional input omitted.
+end_if.
+
+formulas(assumptions).
+SetS(x) -> setc(x).
+SetT(x) -> setc(x).
+Elem(x) -> num(x).
+num(x) -> -setc(x).
+SetS(x) -> -SetT(x).
+(exists x SetS(x)).
+(exists x SetT(x)).
+(exists x Elem(x)).
+in(x,s) & SetS(s) & SetT(t) & in(x,t) & num(x) <-> in(x,inter(s,t)) # label("sentence I").
+(in(x,s) & SetS(s) & num(x) -> in(x,t) & SetT(t)) -> sub(s,t) # label("sentence II").
+end_of_list.
+
+formulas(goals).
+(all s all t (SetS(s) & SetT(t) & sub(inter(s,t),s))).
+end_of_list.
+
+============================== end of input ==========================
+
+% Enabling option dependencies (ignore applies only on input).
+
+============================== PROCESS NON-CLAUSAL FORMULAS ==========
+
+% Formulas that are not ordinary clauses:
+1 SetS(x) -> setc(x) # label(non_clause).  [assumption].
+2 SetT(x) -> setc(x) # label(non_clause).  [assumption].
+3 Elem(x) -> num(x) # label(non_clause).  [assumption].
+4 num(x) -> -setc(x) # label(non_clause).  [assumption].
+5 SetS(x) -> -SetT(x) # label(non_clause).  [assumption].
+6 (exists x SetS(x)) # label(non_clause).  [assumption].
+7 (exists x SetT(x)) # label(non_clause).  [assumption].
+8 (exists x Elem(x)) # label(non_clause).  [assumption].
+9 in(x,s) & SetS(s) & SetT(t) & in(x,t) & num(x) <-> in(x,inter(s,t)) # label("sentence I") # label(non_clause).  [assumption].
+10 (in(x,s) & SetS(s) & num(x) -> in(x,t) & SetT(t)) -> sub(s,t) # label("sentence II") # label(non_clause).  [assumption].
+11 (all s all t (SetS(s) & SetT(t) & sub(inter(s,t),s))) # label(non_clause) # label(goal).  [goal].
+
+============================== end of process non-clausal formulas ===
+
+============================== PROCESS INITIAL CLAUSES ===============
+
+% Clauses before input processing:
+
+formulas(usable).
+end_of_list.
+
+formulas(sos).
+-SetS(x) | setc(x).  [clausify(1)].
+-SetT(x) | setc(x).  [clausify(2)].
+-Elem(x) | num(x).  [clausify(3)].
+-num(x) | -setc(x).  [clausify(4)].
+-SetS(x) | -SetT(x).  [clausify(5)].
+SetS(c1).  [clausify(6)].
+SetT(c2).  [clausify(7)].
+Elem(c3).  [clausify(8)].
+-in(x,s) | -SetS(s) | -SetT(t) | -in(x,t) | -num(x) | in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+in(x,s) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+SetS(s) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+SetT(t) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+in(x,t) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+num(x) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+in(x,s) | sub(s,t) # label("sentence II").  [clausify(10)].
+SetS(s) | sub(s,t) # label("sentence II").  [clausify(10)].
+num(x) | sub(s,t) # label("sentence II").  [clausify(10)].
+-in(x,t) | -SetT(t) | sub(s,t) # label("sentence II").  [clausify(10)].
+-SetS(c4) | -SetT(c5) | -sub(inter(c4,c5),c4).  [deny(11)].
+end_of_list.
+
+formulas(demodulators).
+end_of_list.
+
+============================== PREDICATE ELIMINATION =================
+
+Eliminating SetS/1
+12 SetS(c1).  [clausify(6)].
+13 -SetS(x) | setc(x).  [clausify(1)].
+14 -SetS(x) | -SetT(x).  [clausify(5)].
+Derived: setc(c1).  [resolve(12,a,13,a)].
+Derived: -SetT(c1).  [resolve(12,a,14,a)].
+15 -in(x,s) | -SetS(s) | -SetT(t) | -in(x,t) | -num(x) | in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+16 SetS(s) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+Derived: -in(x,inter(s,t)) | setc(s).  [resolve(16,a,13,a)].
+Derived: -in(x,inter(s,t)) | -SetT(s).  [resolve(16,a,14,a)].
+Derived: -in(x,inter(s,t)) | -in(y,s) | -SetT(t) | -in(y,t) | -num(y) | in(y,inter(s,t)).  [resolve(16,a,15,b)].
+17 SetS(s) | sub(s,t) # label("sentence II").  [clausify(10)].
+Derived: sub(s,t) | setc(s).  [resolve(17,a,13,a)].
+Derived: sub(s,t) | -SetT(s).  [resolve(17,a,14,a)].
+18 -SetS(c4) | -SetT(c5) | -sub(inter(c4,c5),c4).  [deny(11)].
+
+Eliminating SetT/1
+19 SetT(c2).  [clausify(7)].
+20 -SetT(x) | setc(x).  [clausify(2)].
+Derived: setc(c2).  [resolve(19,a,20,a)].
+21 SetT(t) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+Derived: -in(x,inter(s,t)) | setc(t).  [resolve(21,a,20,a)].
+22 -in(x,t) | -SetT(t) | sub(s,t) # label("sentence II").  [clausify(10)].
+Derived: -in(x,t) | sub(s,t) | -in(y,inter(s,t)).  [resolve(22,b,21,a)].
+23 -SetT(c1).  [resolve(12,a,14,a)].
+24 -in(x,inter(s,t)) | -SetT(s).  [resolve(16,a,14,a)].
+25 -in(x,inter(s,t)) | -in(y,s) | -SetT(t) | -in(y,t) | -num(y) | in(y,inter(s,t)).  [resolve(16,a,15,b)].
+Derived: -in(x,inter(s,t)) | -in(y,s) | -in(y,t) | -num(y) | in(y,inter(s,t)) | -in(z,inter(s,t)).  [resolve(25,c,21,a)].
+26 sub(s,t) | -SetT(s).  [resolve(17,a,14,a)].
+
+Eliminating Elem/1
+27 Elem(c3).  [clausify(8)].
+28 -Elem(x) | num(x).  [clausify(3)].
+Derived: num(c3).  [resolve(27,a,28,a)].
+
+Eliminating num/1
+29 num(x) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+30 -num(x) | -setc(x).  [clausify(4)].
+Derived: -in(x,inter(s,t)) | -setc(x).  [resolve(29,a,30,a)].
+31 num(x) | sub(s,t) # label("sentence II").  [clausify(10)].
+Derived: sub(s,t) | -setc(x).  [resolve(31,a,30,a)].
+32 -in(x,inter(s,t)) | -in(y,s) | -in(y,t) | -num(y) | in(y,inter(s,t)) | -in(z,inter(s,t)).  [resolve(25,c,21,a)].
+Derived: -in(x,inter(s,t)) | -in(y,s) | -in(y,t) | in(y,inter(s,t)) | -in(z,inter(s,t)) | sub(s,t).  [resolve(32,d,31,a)].
+33 num(c3).  [resolve(27,a,28,a)].
+Derived: -setc(c3).  [resolve(33,a,30,a)].
+Derived: -in(x,inter(s,t)) | -in(c3,s) | -in(c3,t) | in(c3,inter(s,t)) | -in(y,inter(s,t)).  [resolve(33,a,32,d)].
+
+Eliminating sub/2
+
+Eliminating setc/1
+34 -in(x,inter(s,t)) | -setc(x).  [resolve(29,a,30,a)].
+35 setc(c1).  [resolve(12,a,13,a)].
+36 -in(x,inter(s,t)) | setc(s).  [resolve(16,a,13,a)].
+37 setc(c2).  [resolve(19,a,20,a)].
+38 -in(x,inter(s,t)) | setc(t).  [resolve(21,a,20,a)].
+Derived: -in(c1,inter(s,t)).  [resolve(34,b,35,a)].
+Derived: -in(s,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,36,b)].
+Derived: -in(c2,inter(s,t)).  [resolve(34,b,37,a)].
+Derived: -in(t,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,38,b)].
+39 -setc(c3).  [resolve(33,a,30,a)].
+
+============================== end predicate elimination =============
+
+Auto_denials:
+  % assign(max_proofs, 4).  % (Horn set with more than one neg. clause)
+
+WARNING, because some of the denials share constants,
+some of the denials or their descendents may be subsumed,
+preventing the target number of proofs from being found.
+The shared constants are:  t, s.
+
+Term ordering decisions:
+Predicate symbol precedence:  predicate_order([ in ]).
+Function symbol precedence:  function_order([ s, t, c1, c2, c3, inter ]).
+After inverse_order:  (no changes).
+Unfolding symbols: (none).
+
+Auto_inference settings:
+  % set(hyper_resolution).  % (HNE depth_diff=2)
+    % set(hyper_resolution) -> set(pos_hyper_resolution).
+
+Auto_process settings:
+  % set(unit_deletion).  % (Horn set with negative nonunits)
+
+============================== end of process initial clauses ========
+
+============================== CLAUSES FOR SEARCH ====================
+
+% Clauses after input processing:
+
+formulas(usable).
+end_of_list.
+
+formulas(sos).
+40 in(x,s) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+41 in(x,t) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+42 -in(x,inter(s,t)) | -in(c3,s) | -in(c3,t) | in(c3,inter(s,t)) | -in(y,inter(s,t)).  [resolve(33,a,32,d)].
+43 -in(c1,inter(s,t)).  [resolve(34,b,35,a)].
+44 -in(s,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,36,b)].
+45 -in(c2,inter(s,t)).  [resolve(34,b,37,a)].
+46 -in(t,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,38,b)].
+end_of_list.
+
+formulas(demodulators).
+end_of_list.
+
+============================== end of clauses for search =============
+
+============================== SEARCH ================================
+
+% Starting search at 0.01 seconds.
+
+given #1 (I,wt=8): 40 in(x,s) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+
+given #2 (I,wt=8): 41 in(x,t) | -in(x,inter(s,t)) # label("sentence I").  [clausify(9)].
+
+given #3 (I,wt=21): 42 -in(x,inter(s,t)) | -in(c3,s) | -in(c3,t) | in(c3,inter(s,t)) | -in(y,inter(s,t)).  [resolve(33,a,32,d)].
+
+given #4 (I,wt=5): 43 -in(c1,inter(s,t)).  [resolve(34,b,35,a)].
+
+given #5 (I,wt=10): 44 -in(s,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,36,b)].
+
+given #6 (I,wt=5): 45 -in(c2,inter(s,t)).  [resolve(34,b,37,a)].
+
+given #7 (I,wt=10): 46 -in(t,inter(s,t)) | -in(x,inter(s,t)).  [resolve(34,b,38,b)].
+
+============================== STATISTICS ============================
+
+Given=7. Generated=7. Kept=7. proofs=0.
+Usable=7. Sos=0. Demods=0. Limbo=0, Disabled=40. Hints=0.
+Weight_deleted=0. Literals_deleted=0.
+Forward_subsumed=0. Back_subsumed=0.
+Sos_limit_deleted=0. Sos_displaced=0. Sos_removed=0.
+New_demodulators=0 (0 lex), Back_demodulated=0. Back_unit_deleted=0.
+Demod_attempts=0. Demod_rewrites=0.
+Res_instance_prunes=0. Para_instance_prunes=0. Basic_paramod_prunes=0.
+Nonunit_fsub_feature_tests=2. Nonunit_bsub_feature_tests=9.
+Megabytes=0.04.
+User_CPU=0.01, System_CPU=0.03, Wall_clock=0.
+
+============================== end of statistics =====================
+
+============================== end of search =========================
+
+SEARCH FAILED
+
+Exiting with failure.
+
+Process 8116 exit (sos_empty) Mon Jan  7 01:59:21 2019
